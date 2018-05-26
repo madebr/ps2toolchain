@@ -34,12 +34,15 @@ else
 	PROC_NR=$(nproc)
 fi
 
+## Move outside of source directory.
+cd .. || { exit 1; }
+
 TARGET="ee"
 ## Create and enter the build directory.
 mkdir build-$TARGET-stage2 && cd build-$TARGET-stage2 || { exit 1; }
 
 ## Configure the build.
-../configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" --enable-languages="c,c++" --with-newlib --with-headers $TARG_XTRA_OPTS || { exit 1; }
+../gcc-$GCC_VERSION/configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" --enable-languages="c,c++" --with-newlib --with-headers $TARG_XTRA_OPTS || { exit 1; }
 
 ## Compile and install.
 make clean && make -j $PROC_NR && make install && make clean || { exit 1; }

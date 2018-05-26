@@ -27,12 +27,16 @@ else
 	PROC_NR=$(nproc)
 fi
 
+## Move outside of source directory.
+cd .. || { exit 1; }
+
 TARGET="ee"
+
 ## Create and enter the build directory.
 mkdir build-$TARGET && cd build-$TARGET || { exit 1; }
 
 ## Configure the build.
-../configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" || { exit 1; }
+../newlib-$NEWLIB_VERSION/configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" || { exit 1; }
 
 ## Compile and install.
 make clean && make -j $PROC_NR && make install && make clean || { exit 1; }

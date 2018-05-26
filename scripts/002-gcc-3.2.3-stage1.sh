@@ -35,6 +35,9 @@ else
 	PROC_NR=$(nproc)
 fi
 
+## Move outside of source directory.
+cd .. || { exit 1; }
+
 ## For each target...
 for TARGET in "ee" "iop"; do
 	## Create and enter the build directory.
@@ -42,9 +45,9 @@ for TARGET in "ee" "iop"; do
 
 	## Configure the build.
 	if [ ${OSVER:0:6} == Darwin ]; then
-		CC=/usr/bin/gcc CXX=/usr/bin/g++ LD=/usr/bin/ld CFLAGS="-O0 -ansi -Wno-implicit-int -Wno-return-type" ../configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" --enable-languages="c" --with-newlib --without-headers $TARG_XTRA_OPTS || { exit 1; }
+		CC=/usr/bin/gcc CXX=/usr/bin/g++ LD=/usr/bin/ld CFLAGS="-O0 -ansi -Wno-implicit-int -Wno-return-type" ../gcc-$GCC_VERSION/configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" --enable-languages="c" --with-newlib --without-headers $TARG_XTRA_OPTS || { exit 1; }
 	else
-		../configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" --enable-languages="c" --with-newlib --without-headers $TARG_XTRA_OPTS || { exit 1; }
+		../gcc-$GCC_VERSION/configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" --enable-languages="c" --with-newlib --without-headers $TARG_XTRA_OPTS || { exit 1; }
 	fi
 
 	## Compile and install.

@@ -28,16 +28,20 @@ else
 	PROC_NR=$(nproc)
 fi
 
+## Move outside of source directory.
+cd .. || { exit 1; }
+
 ## For each target...
 for TARGET in "ee" "iop" "dvp"; do
+
 	## Create and enter the build directory.
-	mkdir build-$TARGET && cd build-$TARGET || { exit 1; }
+	mkdir build-$TARGET-binutils && cd build-$TARGET-binutils || { exit 1; }
 
 	## Configure the build.
 	if [ ${OSVER:0:6} == Darwin ]; then
-		CC=/usr/bin/gcc CXX=/usr/bin/g++ LD=/usr/bin/ld CFLAGS="-O0 -ansi -Wno-implicit-int -Wno-return-type" ../configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" || { exit 1; }
+		CC=/usr/bin/gcc CXX=/usr/bin/g++ LD=/usr/bin/ld CFLAGS="-O0 -ansi -Wno-implicit-int -Wno-return-type" ../binutils-$BINUTILS_VERSION/configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" || { exit 1; }
 	else
-		../configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" || { exit 1; }
+		../binutils-$BINUTILS_VERSION/configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" || { exit 1; }
 	fi
 
 	## Compile and install.
