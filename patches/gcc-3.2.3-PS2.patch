@@ -1,6 +1,6 @@
 diff -Nurp gcc-3.2.3-orig/config.sub gcc-3.2.3/config.sub
 --- gcc-3.2.3-orig/config.sub	2003-01-30 17:32:36.000000000 -0500
-+++ gcc-3.2.3/config.sub	2018-05-25 11:56:10.875992837 -0400
++++ gcc-3.2.3/config.sub	2018-05-25 21:51:57.911631464 -0400
 @@ -236,6 +236,7 @@ case $basic_machine in
  	| i370 | i860 | i960 | ia64 \
  	| ip2k \
@@ -57,7 +57,7 @@ diff -Nurp gcc-3.2.3-orig/config.sub gcc-3.2.3/config.sub
  	-qnx*)
 diff -Nurp gcc-3.2.3-orig/configure gcc-3.2.3/configure
 --- gcc-3.2.3-orig/configure	2002-06-24 12:14:28.000000000 -0400
-+++ gcc-3.2.3/configure	2018-05-25 11:56:10.896096227 -0400
++++ gcc-3.2.3/configure	2018-05-25 21:51:57.911631464 -0400
 @@ -89,7 +89,7 @@ subdirs=
  target_alias=NOTARGET
  target_makefile_frag=
@@ -87,7 +87,7 @@ diff -Nurp gcc-3.2.3-orig/configure gcc-3.2.3/configure
  
 diff -Nurp gcc-3.2.3-orig/configure.in gcc-3.2.3/configure.in
 --- gcc-3.2.3-orig/configure.in	2002-07-08 06:00:57.000000000 -0400
-+++ gcc-3.2.3/configure.in	2018-05-25 11:57:25.373528708 -0400
++++ gcc-3.2.3/configure.in	2018-05-25 21:51:57.911631464 -0400
 @@ -460,6 +460,7 @@ copy_dirs=
  
  # Handle --with-headers=XXX.  The contents of the named directory are
@@ -188,9 +188,25 @@ diff -Nurp gcc-3.2.3-orig/configure.in gcc-3.2.3/configure.in
    mips*-*-*)
      noconfigdirs="$noconfigdirs gprof ${libgcj}"
      ;;
+diff -Nurp gcc-3.2.3-orig/gcc/acconfig.h gcc-3.2.3/gcc/acconfig.h
+--- gcc-3.2.3-orig/gcc/acconfig.h	2001-10-09 18:40:11.000000000 -0400
++++ gcc-3.2.3/gcc/acconfig.h	2018-05-27 00:44:14.993284344 -0400
+@@ -29,6 +29,12 @@
+ /* Define if cpp should also search $prefix/include.  */
+ #undef PREFIX_INCLUDE_DIR
+ 
++/* Define if cpp should also search $ps2sdkdir/ee/include.  */
++#undef PS2SDK_EE_INCLUDE_DIR
++
++/* Define if cpp should also search $ps2sdkdir/iop/include.  */
++#undef PS2SDK_IOP_INCLUDE_DIR
++
+ @BOTTOM@
+ 
+ /* Bison unconditionally undefines `const' if neither `__STDC__' nor
 diff -Nurp gcc-3.2.3-orig/gcc/builtins.c gcc-3.2.3/gcc/builtins.c
 --- gcc-3.2.3-orig/gcc/builtins.c	2003-03-29 23:42:16.000000000 -0500
-+++ gcc-3.2.3/gcc/builtins.c	2018-05-25 17:17:43.774471286 -0400
++++ gcc-3.2.3/gcc/builtins.c	2018-05-25 21:51:57.927690665 -0400
 @@ -3702,8 +3702,8 @@ expand_builtin (exp, target, subtarget,
  	return target;
        break;
@@ -204,7 +220,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/builtins.c gcc-3.2.3/gcc/builtins.c
        return expand_builtin_apply_args ();
 diff -Nurp gcc-3.2.3-orig/gcc/builtins.def gcc-3.2.3/gcc/builtins.def
 --- gcc-3.2.3-orig/gcc/builtins.def	2002-01-28 15:07:00.000000000 -0500
-+++ gcc-3.2.3/gcc/builtins.def	2018-05-25 17:14:00.497709838 -0400
++++ gcc-3.2.3/gcc/builtins.def	2018-05-25 21:51:57.927690665 -0400
 @@ -132,7 +132,7 @@ Software Foundation, 59 Temple Place - S
  /* A built-in that is not currently used.  */
  #undef DEF_UNUSED_BUILTIN					
@@ -255,7 +271,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/builtins.def gcc-3.2.3/gcc/builtins.def
 +*/
 diff -Nurp gcc-3.2.3-orig/gcc/caller-save.c gcc-3.2.3/gcc/caller-save.c
 --- gcc-3.2.3-orig/gcc/caller-save.c	2002-01-01 17:22:25.000000000 -0500
-+++ gcc-3.2.3/gcc/caller-save.c	2018-05-25 11:56:10.900116905 -0400
++++ gcc-3.2.3/gcc/caller-save.c	2018-05-25 21:51:57.927690665 -0400
 @@ -50,13 +50,21 @@ Software Foundation, 59 Temple Place - S
     If that is not possible the save is done one register at a time.  */
  
@@ -280,7 +296,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/caller-save.c gcc-3.2.3/gcc/caller-save.c
     saved in its widest mode with a simple SET insn as long as the memory
 diff -Nurp gcc-3.2.3-orig/gcc/c-common.c gcc-3.2.3/gcc/c-common.c
 --- gcc-3.2.3-orig/gcc/c-common.c	2002-12-01 13:19:08.000000000 -0500
-+++ gcc-3.2.3/gcc/c-common.c	2018-05-25 11:56:10.900116905 -0400
++++ gcc-3.2.3/gcc/c-common.c	2018-05-25 21:51:57.927690665 -0400
 @@ -1336,6 +1336,9 @@ type_for_size (bits, unsignedp)
    if (bits <= TYPE_PRECISION (intDI_type_node))
      return unsignedp ? unsigned_intDI_type_node : intDI_type_node;
@@ -354,7 +370,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/c-common.c gcc-3.2.3/gcc/c-common.c
    widest_integer_literal_type_node
 diff -Nurp gcc-3.2.3-orig/gcc/collect2.c gcc-3.2.3/gcc/collect2.c
 --- gcc-3.2.3-orig/gcc/collect2.c	2003-03-30 20:14:02.000000000 -0500
-+++ gcc-3.2.3/gcc/collect2.c	2018-05-25 11:56:10.904137583 -0400
++++ gcc-3.2.3/gcc/collect2.c	2018-05-25 21:51:57.931705464 -0400
 @@ -1587,7 +1587,7 @@ collect_execute (prog, argv, redir)
    if (redir)
      {
@@ -366,7 +382,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/collect2.c gcc-3.2.3/gcc/collect2.c
  	 so they can be restored later.  */
 diff -Nurp gcc-3.2.3-orig/gcc/config/i386/xm-mingw32.h gcc-3.2.3/gcc/config/i386/xm-mingw32.h
 --- gcc-3.2.3-orig/gcc/config/i386/xm-mingw32.h	2002-01-10 17:21:39.000000000 -0500
-+++ gcc-3.2.3/gcc/config/i386/xm-mingw32.h	2018-05-25 11:56:10.904137583 -0400
++++ gcc-3.2.3/gcc/config/i386/xm-mingw32.h	2018-05-25 21:51:57.931705464 -0400
 @@ -31,3 +31,143 @@ Boston, MA 02111-1307, USA.  */
  
  #undef PATH_SEPARATOR
@@ -513,7 +529,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/i386/xm-mingw32.h gcc-3.2.3/gcc/config/i386
 +#endif /* ! HOST_WIDEST_INT */
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/core-mmi.h gcc-3.2.3/gcc/config/mips/core-mmi.h
 --- gcc-3.2.3-orig/gcc/config/mips/core-mmi.h	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/core-mmi.h	2018-05-25 11:56:10.904137583 -0400
++++ gcc-3.2.3/gcc/config/mips/core-mmi.h	2018-05-25 21:51:57.931705464 -0400
 @@ -0,0 +1,104 @@
 +/*
 + * mmi-intrinsics.h - R5900 MMI compiler intrinsics.
@@ -621,12 +637,12 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/core-mmi.h gcc-3.2.3/gcc/config/mips/c
 +
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/core-vumm.h gcc-3.2.3/gcc/config/mips/core-vumm.h
 --- gcc-3.2.3-orig/gcc/config/mips/core-vumm.h	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/core-vumm.h	2018-05-25 11:56:10.904137583 -0400
++++ gcc-3.2.3/gcc/config/mips/core-vumm.h	2018-05-25 21:51:57.931705464 -0400
 @@ -0,0 +1 @@
 +#define __THIS__IS__A__BLANK__FILE__
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/crti5900.asm gcc-3.2.3/gcc/config/mips/crti5900.asm
 --- gcc-3.2.3-orig/gcc/config/mips/crti5900.asm	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/crti5900.asm	2018-05-25 11:56:10.904137583 -0400
++++ gcc-3.2.3/gcc/config/mips/crti5900.asm	2018-05-25 21:51:57.931705464 -0400
 @@ -0,0 +1,16 @@
 +/* 4 slots for argument spill area.  1 for cpreturn, 1 for stack.
 +   Return spill offset of 80.  */
@@ -646,7 +662,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/crti5900.asm gcc-3.2.3/gcc/config/mips
 +	sq      $31,80($sp)
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/crtn5900.asm gcc-3.2.3/gcc/config/mips/crtn5900.asm
 --- gcc-3.2.3-orig/gcc/config/mips/crtn5900.asm	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/crtn5900.asm	2018-05-25 11:56:10.908158261 -0400
++++ gcc-3.2.3/gcc/config/mips/crtn5900.asm	2018-05-25 21:51:57.931705464 -0400
 @@ -0,0 +1,12 @@
 +/* 4 slots for argument spill area.  1 for cpreturn, 1 for stack.
 +   Return spill offset of 80.  */
@@ -662,7 +678,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/crtn5900.asm gcc-3.2.3/gcc/config/mips
 +	j	$31
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips.c gcc-3.2.3/gcc/config/mips/mips.c
 --- gcc-3.2.3-orig/gcc/config/mips/mips.c	2003-02-12 10:25:49.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/mips.c	2018-05-25 11:57:11.442500170 -0400
++++ gcc-3.2.3/gcc/config/mips/mips.c	2018-05-25 21:51:57.935720264 -0400
 @@ -51,6 +51,7 @@ Boston, MA 02111-1307, USA.  */
  #include "gstab.h"
  #include "hashtab.h"
@@ -2070,7 +2086,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips.c gcc-3.2.3/gcc/config/mips/mips.
 +}
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips.h gcc-3.2.3/gcc/config/mips/mips.h
 --- gcc-3.2.3-orig/gcc/config/mips/mips.h	2003-02-12 10:25:48.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/mips.h	2018-05-25 21:03:15.169824840 -0400
++++ gcc-3.2.3/gcc/config/mips/mips.h	2018-05-25 21:51:57.939735065 -0400
 @@ -48,6 +48,7 @@ enum delay_type {
    DELAY_NONE,				/* no delay slot */
    DELAY_LOAD,				/* load from memory delay */
@@ -2676,7 +2692,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips.h gcc-3.2.3/gcc/config/mips/mips.
 +};
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips.md gcc-3.2.3/gcc/config/mips/mips.md
 --- gcc-3.2.3-orig/gcc/config/mips/mips.md	2003-02-12 10:25:50.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/mips.md	2018-05-25 20:53:07.296446606 -0400
++++ gcc-3.2.3/gcc/config/mips/mips.md	2018-05-25 21:51:57.943749865 -0400
 @@ -84,11 +84,11 @@
  ;; nop		no operation
  
@@ -4271,7 +4287,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips.md gcc-3.2.3/gcc/config/mips/mips
 +
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips-protos.h gcc-3.2.3/gcc/config/mips/mips-protos.h
 --- gcc-3.2.3-orig/gcc/config/mips/mips-protos.h	2003-02-12 10:25:45.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/mips-protos.h	2018-05-25 11:56:10.920220295 -0400
++++ gcc-3.2.3/gcc/config/mips/mips-protos.h	2018-05-25 21:51:57.947764665 -0400
 @@ -82,6 +82,7 @@ extern void		gen_conditional_move PARAMS
  extern void		mips_gen_conditional_trap PARAMS ((rtx *));
  extern void		mips_emit_fcc_reload PARAMS ((rtx, rtx, rtx));
@@ -4282,8 +4298,8 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips-protos.h gcc-3.2.3/gcc/config/mip
  extern HOST_WIDE_INT	mips_debugger_offset PARAMS ((rtx, HOST_WIDE_INT));
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/r5900.h gcc-3.2.3/gcc/config/mips/r5900.h
 --- gcc-3.2.3-orig/gcc/config/mips/r5900.h	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/r5900.h	2018-05-25 14:34:01.007886023 -0400
-@@ -0,0 +1,334 @@
++++ gcc-3.2.3/gcc/config/mips/r5900.h	2018-05-27 01:38:09.258655011 -0400
+@@ -0,0 +1,336 @@
 +/*
 + * Target machine definitions for the Toshiba r5900.
 + *
@@ -4317,17 +4333,19 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/r5900.h gcc-3.2.3/gcc/config/mips/r590
 +#undef MACHINE_TYPE
 +#define MACHINE_TYPE "(MIPSel R5900 ELF)"
 +
-+/*
-+ I started doing some macro fixes, but as we plan to use 3.4 soon I'm not risking changing stuff I'm not
-+ certain about.
-+*/
-+/*
-+#define USE_MACRO_FIXES
-+*/
++#define INCLUDE_DEFAULTS \
++{								\
++    { GPLUSPLUS_INCLUDE_DIR, "G++", 1, 1 },			\
++    { GPLUSPLUS_TOOL_INCLUDE_DIR, "G++", 1, 1 },		\
++    { GPLUSPLUS_BACKWARD_INCLUDE_DIR, "G++", 1, 1 },		\
++    { GCC_INCLUDE_DIR, "GCC", 0, 0 },				\
++    { TOOL_INCLUDE_DIR, "BINUTILS", 0, 1 },			\
++    { PS2SDK_EE_INCLUDE_DIR, 0, 0, 1 },				\
++    { 0, 0, 0, 0 }						\
++}
 +
-+/*
-+ gcc-3.0.3-ps2linux has additional min.s and max.s floating point insns. These should be incorporate into mips.md.
-+*/
++#undef LIB_SPEC
++#define LIB_SPEC "-lc -lfileXio --whole-archive -lkernel --no-whole-archive"
 +
 +#define FILL_BDSLOT_WITH_NOP
 +
@@ -4464,7 +4482,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/r5900.h gcc-3.2.3/gcc/config/mips/r590
 + -D__UINT_FAST64_TYPE__=long\\ unsigned\\ int\
 + -D__INTPTR_TYPE__=int\
 + -D__UINTPTR_TYPE__=unsigned\\ int}\
-+ %{mint64: -D_MIPS_SZINT=64}\
++ %{mint64: -D_MIPS_SZINT=32 %n `-mint64` is deprecated\n}\
 + %{!mint64: -D_MIPS_SZINT=32\
 +  %{!mlong64: -D__SIZE_TYPE__=unsigned\\ int\
 + -D__SSIZE_TYPE__=int\
@@ -4620,7 +4638,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/r5900.h gcc-3.2.3/gcc/config/mips/r590
 +        || TREE_CODE (TYPE) == RECORD_TYPE)) ? (mips_use_128 ? 128 : 64) : (ALIGN))
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/t-irx gcc-3.2.3/gcc/config/mips/t-irx
 --- gcc-3.2.3-orig/gcc/config/mips/t-irx	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/t-irx	2018-05-25 11:56:10.920220295 -0400
++++ gcc-3.2.3/gcc/config/mips/t-irx	2018-05-25 21:51:57.947764665 -0400
 @@ -0,0 +1,77 @@
 +CONFIG2_H	= $(srcdir)/config/mips/ecoff.h
 +
@@ -4701,7 +4719,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/t-irx gcc-3.2.3/gcc/config/mips/t-irx
 +reload.o: $(CONFIG2_H)
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/t-r5900 gcc-3.2.3/gcc/config/mips/t-r5900
 --- gcc-3.2.3-orig/gcc/config/mips/t-r5900	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/t-r5900	2018-05-25 11:56:10.920220295 -0400
++++ gcc-3.2.3/gcc/config/mips/t-r5900	2018-05-25 21:51:57.947764665 -0400
 @@ -0,0 +1,56 @@
 +# Suppress building libgcc1.a, since the MIPS compiler port is complete
 +# and does not need anything from libgcc1.a.
@@ -4761,7 +4779,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/t-r5900 gcc-3.2.3/gcc/config/mips/t-r5
 +LIB2FUNCS_TI = $(TIMODE_FUNCS_LIST)
 diff -Nurp gcc-3.2.3-orig/gcc/config.gcc gcc-3.2.3/gcc/config.gcc
 --- gcc-3.2.3-orig/gcc/config.gcc	2003-02-28 13:38:19.000000000 -0500
-+++ gcc-3.2.3/gcc/config.gcc	2018-05-25 11:56:10.920220295 -0400
++++ gcc-3.2.3/gcc/config.gcc	2018-05-25 21:51:57.947764665 -0400
 @@ -1553,6 +1553,10 @@ i[34567]86-*-mingw32*)
  		*minwg32msv* | *mingw32*)
  			;;
@@ -4821,9 +4839,52 @@ diff -Nurp gcc-3.2.3-orig/gcc/config.gcc gcc-3.2.3/gcc/config.gcc
  	fi
  fi
 +
+diff -Nurp gcc-3.2.3-orig/gcc/config.in gcc-3.2.3/gcc/config.in
+--- gcc-3.2.3-orig/gcc/config.in	2003-04-22 02:56:18.000000000 -0400
++++ gcc-3.2.3/gcc/config.in	2018-05-27 00:46:25.718497241 -0400
+@@ -81,6 +81,12 @@
+ /* Define to `int' if <sys/types.h> doesn't define.  */
+ #undef ssize_t
+ 
++/* Define if cpp should also search $ps2sdkdir/ee/include.  */
++#undef PS2SDK_EE_INCLUDE_DIR
++
++/* Define if cpp should also search $ps2sdkdir/iop/include.  */
++#undef PS2SDK_IOP_INCLUDE_DIR
++
+ /* Define if cpp should also search $prefix/include.  */
+ #undef PREFIX_INCLUDE_DIR
+ 
+diff -Nurp gcc-3.2.3-orig/gcc/configure gcc-3.2.3/gcc/configure
+--- gcc-3.2.3-orig/gcc/configure	2003-02-03 19:17:46.000000000 -0500
++++ gcc-3.2.3/gcc/configure	2018-05-27 00:52:19.170679565 -0400
+@@ -7890,6 +7890,23 @@ EOF
+ 
+ fi
+ 
++# PS2SDK is installed parallel to the prefix of gcc
++# /usr/local/ps2dev/ee
++# /usr/local/ps2dev/iop
++# /usr/local/ps2dev/ps2sdk
++# This creates a prefix for the ps2sdk directory. 
++if test "$prefix" != "/usr" && test "$prefix" != "/usr/local" ; then
++ps2sdkdir=`echo ${prefix} | sed -e 's/\([^.\/]*$\)/ps2sdk/g'`
++fi
++
++if test "x$ps2sdkdir" != "x" ; then
++  cat >> confdefs.h <<EOF
++#define PS2SDK_EE_INCLUDE_DIR "$ps2sdkdir/ee/include"
++#define PS2SDK_IOP_INCLUDE_DIR "$ps2sdkdir/iop/include"
++EOF
++
++fi
++
+ if test "$prefix" != "/usr" && test "$prefix" != "/usr/local" ; then
+   cat >> confdefs.h <<EOF
+ #define PREFIX_INCLUDE_DIR "$prefix/include"
 diff -Nurp gcc-3.2.3-orig/gcc/cp/decl2.c gcc-3.2.3/gcc/cp/decl2.c
 --- gcc-3.2.3-orig/gcc/cp/decl2.c	2003-04-15 12:26:44.000000000 -0400
-+++ gcc-3.2.3/gcc/cp/decl2.c	2018-05-25 11:56:24.614773248 -0400
++++ gcc-3.2.3/gcc/cp/decl2.c	2018-05-25 21:51:57.951779465 -0400
 @@ -1283,6 +1283,7 @@ check_classfn (ctype, function)
    tree method_vec = CLASSTYPE_METHOD_VEC (complete_type (ctype));
    tree *methods = 0;
@@ -4857,7 +4918,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/cp/decl2.c gcc-3.2.3/gcc/cp/decl2.c
  			  && compparms (p1, p2)
 diff -Nurp gcc-3.2.3-orig/gcc/cp/decl.c gcc-3.2.3/gcc/cp/decl.c
 --- gcc-3.2.3-orig/gcc/cp/decl.c	2003-03-17 18:16:55.000000000 -0500
-+++ gcc-3.2.3/gcc/cp/decl.c	2018-05-25 11:56:10.924240973 -0400
++++ gcc-3.2.3/gcc/cp/decl.c	2018-05-25 21:51:57.955794265 -0400
 @@ -458,6 +458,10 @@ struct binding_level
     ? cp_function_chain->bindings		\
     : scope_chain->bindings)
@@ -5002,7 +5063,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/cp/decl.c gcc-3.2.3/gcc/cp/decl.c
  					nullify_returns_r, r);
 diff -Nurp gcc-3.2.3-orig/gcc/crtstuff.c gcc-3.2.3/gcc/crtstuff.c
 --- gcc-3.2.3-orig/gcc/crtstuff.c	2002-02-05 05:31:01.000000000 -0500
-+++ gcc-3.2.3/gcc/crtstuff.c	2018-05-25 12:44:31.853996788 -0400
++++ gcc-3.2.3/gcc/crtstuff.c	2018-05-25 21:51:57.959809066 -0400
 @@ -124,7 +124,9 @@ extern void *__deregister_frame_info_bas
  				     TARGET_ATTRIBUTE_WEAK;
  
@@ -5015,7 +5076,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/crtstuff.c gcc-3.2.3/gcc/crtstuff.c
  
 diff -Nurp gcc-3.2.3-orig/gcc/defaults.h gcc-3.2.3/gcc/defaults.h
 --- gcc-3.2.3-orig/gcc/defaults.h	2002-06-07 13:11:34.000000000 -0400
-+++ gcc-3.2.3/gcc/defaults.h	2018-05-25 12:43:50.433042462 -0400
++++ gcc-3.2.3/gcc/defaults.h	2018-05-25 21:51:57.959809066 -0400
 @@ -220,11 +220,9 @@ do { ASM_OUTPUT_LABEL(FILE,LABEL_ALTERNA
  /* If we have named section and we support weak symbols, then use the
     .jcr section for recording java classes which need to be registered
@@ -5031,7 +5092,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/defaults.h gcc-3.2.3/gcc/defaults.h
     ability to generate arbitrary sections, construct something
 diff -Nurp gcc-3.2.3-orig/gcc/fixinc/gnu-regex.c gcc-3.2.3/gcc/fixinc/gnu-regex.c
 --- gcc-3.2.3-orig/gcc/fixinc/gnu-regex.c	2002-02-26 19:23:56.000000000 -0500
-+++ gcc-3.2.3/gcc/fixinc/gnu-regex.c	2018-05-25 11:56:10.928261651 -0400
++++ gcc-3.2.3/gcc/fixinc/gnu-regex.c	2018-05-25 21:51:57.967838666 -0400
 @@ -26,6 +26,9 @@
  # include <config.h>
  #endif
@@ -5044,7 +5105,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/fixinc/gnu-regex.c gcc-3.2.3/gcc/fixinc/gnu-regex.
  /* GCC LOCAL: to handle defining alloca.  */
 diff -Nurp gcc-3.2.3-orig/gcc/fixinc/mkfixinc.sh gcc-3.2.3/gcc/fixinc/mkfixinc.sh
 --- gcc-3.2.3-orig/gcc/fixinc/mkfixinc.sh	2002-01-04 23:06:51.000000000 -0500
-+++ gcc-3.2.3/gcc/fixinc/mkfixinc.sh	2018-05-25 11:56:10.928261651 -0400
++++ gcc-3.2.3/gcc/fixinc/mkfixinc.sh	2018-05-25 21:51:57.967838666 -0400
 @@ -80,6 +80,8 @@ case $machine in
      i?86-*-mingw32* | \
      i?86-*-uwin* | \
@@ -5056,7 +5117,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/fixinc/mkfixinc.sh gcc-3.2.3/gcc/fixinc/mkfixinc.s
      powerpc-*-eabi*    | \
 diff -Nurp gcc-3.2.3-orig/gcc/glimits.h gcc-3.2.3/gcc/glimits.h
 --- gcc-3.2.3-orig/gcc/glimits.h	2001-08-13 20:53:23.000000000 -0400
-+++ gcc-3.2.3/gcc/glimits.h	2018-05-25 15:49:54.477127349 -0400
++++ gcc-3.2.3/gcc/glimits.h	2018-05-25 21:51:57.967838666 -0400
 @@ -67,17 +67,28 @@
  /* Minimum and maximum values a `signed long int' can hold.
     (Same as `int').  */
@@ -5090,7 +5151,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/glimits.h gcc-3.2.3/gcc/glimits.h
  #define ULONG_MAX (LONG_MAX * 2UL + 1)
 diff -Nurp gcc-3.2.3-orig/gcc/integrate.c gcc-3.2.3/gcc/integrate.c
 --- gcc-3.2.3-orig/gcc/integrate.c	2003-02-03 15:56:29.000000000 -0500
-+++ gcc-3.2.3/gcc/integrate.c	2018-05-25 11:56:10.928261651 -0400
++++ gcc-3.2.3/gcc/integrate.c	2018-05-25 21:51:57.967838666 -0400
 @@ -358,12 +358,18 @@ copy_decl_for_inlining (decl, from_fn, t
    /* Copy the declaration.  */
    if (TREE_CODE (decl) == PARM_DECL || TREE_CODE (decl) == RESULT_DECL)
@@ -5112,7 +5173,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/integrate.c gcc-3.2.3/gcc/integrate.c
      {
 diff -Nurp gcc-3.2.3-orig/gcc/libgcc2-timode.c gcc-3.2.3/gcc/libgcc2-timode.c
 --- gcc-3.2.3-orig/gcc/libgcc2-timode.c	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/gcc/libgcc2-timode.c	2018-05-25 11:56:10.932282329 -0400
++++ gcc-3.2.3/gcc/libgcc2-timode.c	2018-05-25 21:51:57.983897866 -0400
 @@ -0,0 +1,792 @@
 +/* GCC rutime support routines for TI mode */
 +
@@ -5908,7 +5969,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/libgcc2-timode.c gcc-3.2.3/gcc/libgcc2-timode.c
 +#endif
 diff -Nurp gcc-3.2.3-orig/gcc/Makefile.in gcc-3.2.3/gcc/Makefile.in
 --- gcc-3.2.3-orig/gcc/Makefile.in	2003-01-28 16:54:07.000000000 -0500
-+++ gcc-3.2.3/gcc/Makefile.in	2018-05-25 17:04:46.019938568 -0400
++++ gcc-3.2.3/gcc/Makefile.in	2018-05-25 21:51:57.987912667 -0400
 @@ -86,7 +86,7 @@ STRICT_WARN = -Wtraditional @strict1_war
  STRICT2_WARN = -Wtraditional -pedantic -Wno-long-long
  
@@ -5996,7 +6057,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/Makefile.in gcc-3.2.3/gcc/Makefile.in
  # Files related to the fixproto script.
 diff -Nurp gcc-3.2.3-orig/gcc/mklibgcc.in gcc-3.2.3/gcc/mklibgcc.in
 --- gcc-3.2.3-orig/gcc/mklibgcc.in	2003-01-28 16:57:40.000000000 -0500
-+++ gcc-3.2.3/gcc/mklibgcc.in	2018-05-25 11:56:36.420917413 -0400
++++ gcc-3.2.3/gcc/mklibgcc.in	2018-05-25 21:51:57.987912667 -0400
 @@ -232,6 +232,21 @@ for file in $LIB2ADD_ST; do
    libgcc2_st_objs="$libgcc2_st_objs ${oname}${objext}"
  done
@@ -6046,7 +6107,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/mklibgcc.in gcc-3.2.3/gcc/mklibgcc.in
  
 diff -Nurp gcc-3.2.3-orig/gcc/read-rtl.c gcc-3.2.3/gcc/read-rtl.c
 --- gcc-3.2.3-orig/gcc/read-rtl.c	2002-01-15 08:37:58.000000000 -0500
-+++ gcc-3.2.3/gcc/read-rtl.c	2018-05-25 11:56:51.010406044 -0400
++++ gcc-3.2.3/gcc/read-rtl.c	2018-05-25 21:51:57.987912667 -0400
 @@ -659,7 +659,7 @@ again:
  	    {
  	      ungetc (c, infile);
@@ -6058,7 +6119,16 @@ diff -Nurp gcc-3.2.3-orig/gcc/read-rtl.c gcc-3.2.3/gcc/read-rtl.c
  	    {
 diff -Nurp gcc-3.2.3-orig/gcc/system.h gcc-3.2.3/gcc/system.h
 --- gcc-3.2.3-orig/gcc/system.h	2003-03-30 20:14:02.000000000 -0500
-+++ gcc-3.2.3/gcc/system.h	2018-05-25 11:56:51.010406044 -0400
++++ gcc-3.2.3/gcc/system.h	2018-05-26 13:43:48.636349523 -0400
+@@ -26,7 +26,7 @@ Software Foundation, 59 Temple Place - S
+ /* This is the location of the online document giving information how
+    to report bugs. If you change this string, also check for strings
+    not under control of the preprocessor.  */
+-#define GCCBUGURL "<URL:http://gcc.gnu.org/bugs.html>"
++#define GCCBUGURL "<URL:https://github.com/ps2dev/ps2toolchain/issues>"
+ 
+ /* We must include stdarg.h/varargs.h before stdio.h.  */
+ #ifdef ANSI_PROTOTYPES
 @@ -589,7 +589,9 @@ typedef char _Bool;
  #undef realloc
  #undef calloc
@@ -6083,7 +6153,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/system.h gcc-3.2.3/gcc/system.h
  #endif /* ! GCC_SYSTEM_H */
 diff -Nurp gcc-3.2.3-orig/gcc/toplev.c gcc-3.2.3/gcc/toplev.c
 --- gcc-3.2.3-orig/gcc/toplev.c	2003-02-22 00:37:46.000000000 -0500
-+++ gcc-3.2.3/gcc/toplev.c	2018-05-25 11:56:10.932282329 -0400
++++ gcc-3.2.3/gcc/toplev.c	2018-05-25 21:51:57.987912667 -0400
 @@ -3469,6 +3469,18 @@ rest_of_compilation (decl)
  
    convert_to_eh_region_ranges ();
@@ -6103,9 +6173,18 @@ diff -Nurp gcc-3.2.3-orig/gcc/toplev.c gcc-3.2.3/gcc/toplev.c
    /* Shorten branches.  */
    timevar_push (TV_SHORTEN_BRANCH);
    shorten_branches (get_insns ());
+diff -Nurp gcc-3.2.3-orig/gcc/version.c gcc-3.2.3/gcc/version.c
+--- gcc-3.2.3-orig/gcc/version.c	2003-04-22 02:16:03.000000000 -0400
++++ gcc-3.2.3/gcc/version.c	2018-05-26 13:45:47.538314341 -0400
+@@ -1,4 +1,4 @@
+ #include "ansidecl.h"
+ #include "version.h"
+ 
+-const char *const version_string = "3.2.3";
++const char *const version_string = "3.2.3 20180526 (PS2DEV)";
 diff -Nurp gcc-3.2.3-orig/include/obstack.h gcc-3.2.3/include/obstack.h
 --- gcc-3.2.3-orig/include/obstack.h	2001-03-14 14:44:38.000000000 -0500
-+++ gcc-3.2.3/include/obstack.h	2018-05-25 11:56:10.936303007 -0400
++++ gcc-3.2.3/include/obstack.h	2018-05-25 21:51:57.991927467 -0400
 @@ -423,7 +423,8 @@ __extension__								\
  ({ struct obstack *__o = (OBSTACK);					\
     if (__o->next_free + sizeof (void *) > __o->chunk_limit)		\
@@ -6118,7 +6197,7 @@ diff -Nurp gcc-3.2.3-orig/include/obstack.h gcc-3.2.3/include/obstack.h
  # define obstack_int_grow(OBSTACK,datum)				\
 diff -Nurp gcc-3.2.3-orig/libiberty/configure gcc-3.2.3/libiberty/configure
 --- gcc-3.2.3-orig/libiberty/configure	2003-04-14 10:22:13.000000000 -0400
-+++ gcc-3.2.3/libiberty/configure	2018-05-25 12:03:22.079179049 -0400
++++ gcc-3.2.3/libiberty/configure	2018-05-25 21:51:57.991927467 -0400
 @@ -2071,6 +2071,8 @@ EOF
      # Of the functions in $checkfuncs, newlib only has strerror.
      cat >> confdefs.h <<\EOF
@@ -6130,7 +6209,7 @@ diff -Nurp gcc-3.2.3-orig/libiberty/configure gcc-3.2.3/libiberty/configure
  
 diff -Nurp gcc-3.2.3-orig/libstdc++-v3/configure.target gcc-3.2.3/libstdc++-v3/configure.target
 --- gcc-3.2.3-orig/libstdc++-v3/configure.target	2002-09-06 14:32:08.000000000 -0400
-+++ gcc-3.2.3/libstdc++-v3/configure.target	2018-05-25 11:56:10.936303007 -0400
++++ gcc-3.2.3/libstdc++-v3/configure.target	2018-05-25 21:51:57.991927467 -0400
 @@ -55,6 +55,9 @@ case "${target_cpu}" in
    m68k | m680[246]0)
      cpu_include_dir="config/cpu/m68k"
@@ -6143,7 +6222,7 @@ diff -Nurp gcc-3.2.3-orig/libstdc++-v3/configure.target gcc-3.2.3/libstdc++-v3/c
      ;;
 diff -Nurp gcc-3.2.3-orig/libstdc++-v3/libsupc++/pure.cc gcc-3.2.3/libstdc++-v3/libsupc++/pure.cc
 --- gcc-3.2.3-orig/libstdc++-v3/libsupc++/pure.cc	2002-06-28 04:22:38.000000000 -0400
-+++ gcc-3.2.3/libstdc++-v3/libsupc++/pure.cc	2018-05-25 11:56:10.936303007 -0400
++++ gcc-3.2.3/libstdc++-v3/libsupc++/pure.cc	2018-05-25 21:51:57.991927467 -0400
 @@ -46,6 +46,6 @@
  extern "C" void
  __cxa_pure_virtual (void)
@@ -6154,7 +6233,7 @@ diff -Nurp gcc-3.2.3-orig/libstdc++-v3/libsupc++/pure.cc gcc-3.2.3/libstdc++-v3/
  }
 diff -Nurp gcc-3.2.3-orig/README.PS2 gcc-3.2.3/README.PS2
 --- gcc-3.2.3-orig/README.PS2	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/README.PS2	2018-05-25 11:56:10.936303007 -0400
++++ gcc-3.2.3/README.PS2	2018-05-25 21:51:57.991927467 -0400
 @@ -0,0 +1,80 @@
 +Apologies to mrbrown, who's README.PS2 this was based on.
 +GCC for Sony Playstation 2
