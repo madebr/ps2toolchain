@@ -35,7 +35,7 @@ cd .. || { exit 1; }
 TARGET="ee"
 
 ## Create and enter the build directory.
-mkdir build-$TARGET && cd build-$TARGET || { exit 1; }
+rm -Rf build-$TARGET-newlib && mkdir build-$TARGET-newlib && cd build-$TARGET-newlib || { exit 1; }
 
 ## Configure the build.
 ../newlib-$NEWLIB_VERSION/configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" || { exit 1; }

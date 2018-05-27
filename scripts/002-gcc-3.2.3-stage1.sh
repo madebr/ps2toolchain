@@ -47,8 +47,9 @@ cd .. || { exit 1; }
 
 ## For each target...
 for TARGET in "ee" "iop"; do
+
 	## Create and enter the build directory.
-	mkdir build-$TARGET-stage1 && cd build-$TARGET-stage1 || { exit 1; }
+	rm -Rf build-$TARGET-stage1 && mkdir build-$TARGET-stage1 && cd build-$TARGET-stage1 || { exit 1; }
 
 	## Configure the build.
 	if [ ${OSVER:0:6} == Darwin ]; then

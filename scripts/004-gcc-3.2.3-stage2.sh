@@ -46,7 +46,7 @@ cd .. || { exit 1; }
 
 TARGET="ee"
 ## Create and enter the build directory.
-mkdir build-$TARGET-stage2 && cd build-$TARGET-stage2 || { exit 1; }
+rm -Rf build-$TARGET-stage2 && mkdir build-$TARGET-stage2 && cd build-$TARGET-stage2 || { exit 1; }
 
 ## Configure the build.
 ../gcc-$GCC_VERSION/configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" --enable-languages="c,c++" --with-newlib --with-headers $TARG_XTRA_OPTS || { exit 1; }

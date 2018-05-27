@@ -36,7 +36,7 @@ cd .. || { exit 1; }
 for TARGET in "ee" "iop" "dvp"; do
 
 	## Create and enter the build directory.
-	mkdir build-$TARGET-binutils && cd build-$TARGET-binutils || { exit 1; }
+	rm -Rf build-$TARGET-binutils && mkdir build-$TARGET-binutils && cd build-$TARGET-binutils || { exit 1; }
 
 	## Configure the build.
 	if [ ${OSVER:0:6} == Darwin ]; then
