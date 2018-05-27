@@ -4,12 +4,19 @@
 
 GCC_VERSION=3.2.3
 ## Download the source code.
-SOURCE=http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2
-wget --continue $SOURCE || { exit 1; }
+SOURCE=http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-core-$GCC_VERSION.tar.bz2
+if [ ! -e gcc-core-$GCC_VERSION.tar.bz2 ]; then
+	wget --continue $SOURCE || { exit 1; }
+fi
+
+SOURCE=http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-g++-$GCC_VERSION.tar.bz2
+if [ ! -e gcc-g++-$GCC_VERSION.tar.bz2 ]; then
+	wget --continue $SOURCE || { exit 1; }
+fi
 
 ## Unpack the source code.
 echo Decompressing GCC $GCC_VERSION. Please wait.
-rm -Rf gcc-$GCC_VERSION && tar xfj gcc-$GCC_VERSION.tar.bz2 || { exit 1; }
+rm -Rf gcc-$GCC_VERSION && tar xfj gcc-core-$GCC_VERSION.tar.bz2 && tar xfj gcc-g++-$GCC_VERSION.tar.bz2 || { exit 1; }
 
 ## Enter the source directory and patch the source code.
 cd gcc-$GCC_VERSION || { exit 1; }

@@ -4,7 +4,9 @@
 NEWLIB_VERSION=3.0.0.20180226
 ## Download the source code.
 SOURCE=ftp://sourceware.org/pub/newlib/newlib-$NEWLIB_VERSION.tar.gz
-wget --continue $SOURCE || { exit 1; }
+if [ ! -e newlib-$NEWLIB_VERSION.tar.gz ]; then
+	wget --continue $SOURCE || { exit 1; }
+fi
 
 ## Unpack the source code.
 echo Decompressing newlib $NEWLIB_VERSION. Please wait.
