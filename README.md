@@ -20,8 +20,11 @@ These scripts download (with wget) and install:
 2. Create the directory for the PS2DEV environment and make sure your user
    account has read/write permission for it.
 
-3. Set the PS2DEV environment variable to that directory.  
-`PS2DEV=/usr/local/ps2dev ./toolchain.sh`
+3. Set the PS2DEV environment variable to that directory.
+   ```sh
+   export PS2DEV=/usr/local/ps2dev
+   ./toolchain.sh
+   ```
 
 ## ps2dev.sh
 
@@ -30,13 +33,11 @@ PS2DEV environment.
 
 Copy it to your HOME directory and add this line to your .bashrc, or
 .bash_profile, or .profile depending on the enviroment.  
-`source ~/ps2dev.sh`
+`. ~/ps2dev.sh`
 
 Or, you can source it manually if you don't wish to modify your global user
 environment. Remember the environment is only set for that process and any
-processes it creates. This command has to be executed each time when using
-the PS2DEV environment.  
-`. ~/ps2dev.sh`
+processes it creates.
 
 ## Steps
 
