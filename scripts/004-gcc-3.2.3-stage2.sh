@@ -2,6 +2,9 @@
 # gcc-3.2.3-stage2.sh by uyjulian
 # Based on gcc-3.2.2-stage2.sh by Naomi Peori (naomi@peori.ca)
 
+# Source the PS2DEV environment
+source ../ps2dev.sh || { exit 1; }
+
 GCC_VERSION=3.2.3
 ## Download the source code.
 SOURCE=http://ftpmirror.gnu.org/gcc/gcc-$GCC_VERSION/gcc-core-$GCC_VERSION.tar.bz2

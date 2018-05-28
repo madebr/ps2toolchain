@@ -1,6 +1,9 @@
 #!/bin/bash
 # newlib-1.10.0.sh by Naomi Peori (naomi@peori.ca)
 
+# Source the PS2DEV environment
+source ../ps2dev.sh || { exit 1; }
+
 NEWLIB_VERSION=3.0.0.20180226
 ## Download the source code.
 SOURCE=ftp://sourceware.org/pub/newlib/newlib-$NEWLIB_VERSION.tar.gz

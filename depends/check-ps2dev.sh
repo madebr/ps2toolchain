@@ -1,17 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 # check-pspdev.sh by Naomi Peori (naomi@peori.ca)
 
-## Check if $PS2DEV is set.
-if test ! $PS2DEV; then { echo "ERROR: Set \$PS2DEV before continuing."; exit 1; } fi
-
-## Check if $PS2SDK is set.
-if test ! $PS2SDK; then { echo "ERROR: Set \$PS2SDK before continuing."; exit 1; } fi
+source ../ps2dev.sh || { echo "ERROR: Unable to process ps2dev.sh."; exit 1; }
 
 ## Check for the $PS2DEV directory.
-ls -ld $PS2DEV 1> /dev/null || mkdir -p $PS2DEV 1> /dev/null || { echo "ERROR: Create $PS2DEV before continuing."; exit 1; }
+mkdir -p $PS2DEV 1> /dev/null || { echo "ERROR: Create $PS2DEV before continuing."; exit 1; }
 
 ## Check for the $PS2SDK directory.
-ls -ld $PS2SDK 1> /dev/null || mkdir -p $PS2SDK 1> /dev/null || { echo "ERROR: Create $PS2SDK before continuing."; exit 1; }
+mkdir -p $PS2SDK 1> /dev/null || { echo "ERROR: Create $PS2SDK before continuing."; exit 1; }
 
 ## Check for $PS2DEV write permission.
 touch $PS2DEV/test.tmp 1> /dev/null || { echo "ERROR: Grant write permissions for $PS2DEV before continuing."; exit 1; }

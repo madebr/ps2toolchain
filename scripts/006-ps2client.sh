@@ -2,6 +2,9 @@
 # ps2client.sh by Naomi Peori (naomi@peori.ca)
 # changed to use Git by Mathias Lafeldt <misfire@debugon.org>
 
+# Source the PS2DEV environment
+source ../ps2dev.sh || { exit 1; }
+
 ## Download the source code.
 if test ! -d "ps2client/.git"; then
 	git clone https://github.com/ps2dev/ps2client && cd ps2client || exit 1

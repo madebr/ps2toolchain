@@ -1,6 +1,9 @@
 #!/bin/bash
 # binutils-2.14.sh by Naomi Peori (naomi@peori.ca)
 
+# Source the PS2DEV environment
+source ../ps2dev.sh || { exit 1; }
+
 BINUTILS_VERSION=2.14
 ## Download the source code.
 SOURCE=http://ftpmirror.gnu.org/binutils/binutils-$BINUTILS_VERSION.tar.bz2

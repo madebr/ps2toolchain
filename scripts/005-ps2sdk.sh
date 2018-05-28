@@ -2,6 +2,9 @@
 # ps2sdk.sh by Naomi Peori (naomi@peori.ca)
 # changed to use Git by Mathias Lafeldt <misfire@debugon.org>
 
+# Source the PS2DEV environment
+source ../ps2dev.sh || { exit 1; }
+
 # make sure ps2sdk's makefile does not use it
 unset PS2SDKSRC
 
