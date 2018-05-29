@@ -10,7 +10,7 @@ unset PS2SDKSRC
 
 ## Download the source code.
 if test ! -d "ps2sdk/.git"; then
-	git clone https://github.com/ps2dev/ps2sdk && cd ps2sdk || exit 1
+	git clone https://github.com/Boganon/ps2sdk && cd ps2sdk || exit 1
 else
 	cd ps2sdk || exit 1
 
@@ -51,14 +51,18 @@ git stash save 'toolchain.sh' || exit 1
 ## rebasing if origin was force pushed.
 ## While in this mode, no branches will be affected or commits saved unless
 ## git checkout -b <branch> is used to create a branch.
-git checkout FETCH_HEAD || exit 1
+git checkout origin/posix || exit 1
 
 ## Build and install
-make clean && make -j $PROC_NR && make install && make clean
+echo 'Building PS2SDK'
+make -s -r -j $PROC_NR clean && /usr/bin/time -f "Total time: %E" make -s -r -j $PROC_NR || exit 1
+echo 'Installing PS2SDK'
+make -s -r install && make -r -j $PROC_NR clean || exit 1
 
 ## Checkout the saved branch to exit detached HEAD mode
 git checkout $SDKBRANCH || exit 1
 
-## Restore the locally changed files.
-git stash pop || exit 1
+## Restore the locally changed files. (may exit 1 if no stash found)
+git stash pop
 
+exit 0
