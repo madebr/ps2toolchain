@@ -6641,7 +6641,7 @@ diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/machine/r5900/Makefile.in newl
 +.NOEXPORT:
 diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/machine/r5900/mcount_internal.c newlib-3.0.0.20180226/newlib/libc/machine/r5900/mcount_internal.c
 --- newlib-3.0.0.20180226-orig/newlib/libc/machine/r5900/mcount_internal.c	1969-12-31 19:00:00.000000000 -0500
-+++ newlib-3.0.0.20180226/newlib/libc/machine/r5900/mcount_internal.c	2018-05-26 22:52:34.535950832 -0400
++++ newlib-3.0.0.20180226/newlib/libc/machine/r5900/mcount_internal.c	2018-05-29 00:16:46.908170650 -0400
 @@ -0,0 +1,290 @@
 +/*
 +# _____     ___ ____     ___ ____
@@ -6692,7 +6692,7 @@ diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/machine/r5900/mcount_internal.
 +
 +#define GMONVERSION	0x00051879
 +
-+#ifndef MCOUNT_USE_T0
++#ifdef MCOUNT_USE_T0
 +#define INTC_TIM       INTC_TIM0
 +#define T_COUNT        T0_COUNT
 +#define T_MODE         T0_MODE
@@ -6759,8 +6759,8 @@ diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/machine/r5900/mcount_internal.
 +static int initialized = 0;
 +
 +/** defined by linker */
-+extern int _ftext;
-+extern int _etext;
++extern unsigned int _ftext;
++extern unsigned int _etext;
 +
 +/* forward declarations */
 +static void cleanup();
