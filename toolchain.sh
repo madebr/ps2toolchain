@@ -8,7 +8,6 @@ cd "`dirname $0`" || { echo "ERROR: Could not enter the ps2toolchain directory."
 if test ! $PS2DEV; then { echo 'ERROR: Set $PS2DEV before continuing.'; exit 1; } fi
 
 ## Create the PS2DEV environment script
-echo 'Creating ps2dev.sh environment script'
 echo '#!/bin/bash -u'                              >  ./ps2dev.sh
 echo ""                                            >> ./ps2dev.sh
 echo "export PS2DEV=\"$PS2DEV\""                   >> ./ps2dev.sh

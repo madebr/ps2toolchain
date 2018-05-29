@@ -12,9 +12,22 @@ unset PS2SDKSRC
 if test ! -d "ps2sdk/.git"; then
 	git clone https://github.com/ps2dev/ps2sdk && cd ps2sdk || exit 1
 else
-	cd ps2sdk &&
-		git pull && git fetch origin &&
-		git reset --hard origin/master || exit 1
+	cd ps2sdk || exit 1
+
+	git branch -l | grep 'detached' &> /dev/null
+
+	# The script may have been terminated or an error occurred while
+	# building ps2sdk in detached HEAD mode. Just checkout master to exit
+	# it. If a stash was saved then the user can decide to restore it
+	# after ps2sdk is built. If a user modified files between then and
+	# now in detached HEAD state, save those changes, too.
+	if [ $? == 0 ]; then
+		git stash save 'toolchain.sh' || exit 1
+		git checkout master || exit 1
+	fi
+	# There may be conflicts if origin was force pushed so only fetch
+	# the latest sources but don't try to merge them.
+	git fetch origin || exit 1
 fi
 
 ## Determine the maximum number of processes that Make can work with.
@@ -28,6 +41,24 @@ else
 	PROC_NR=$(nproc)
 fi
 
+## Store the current branch
+SDKBRANCH=`git branch -l | grep \* | cut -d ' ' -f2-`
+
+## Stash the locally changed files.
+git stash save 'toolchain.sh' || exit 1
+
+## Checkout the latest origin/master source in detached HEAD mode to avoid
+## rebasing if origin was force pushed.
+## While in this mode, no branches will be affected or commits saved unless
+## git checkout -b <branch> is used to create a branch.
+git checkout FETCH_HEAD || exit 1
+
 ## Build and install
-make clean && make -j $PROC_NR && make install && make clean || { exit 1; }
+make clean && make -j $PROC_NR && make install && make clean
+
+## Checkout the saved branch to exit detached HEAD mode
+git checkout $SDKBRANCH || exit 1
+
+## Restore the locally changed files.
+git stash pop || exit 1
 
