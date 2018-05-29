@@ -44,4 +44,4 @@ rm -Rf build-$TARGET-newlib && mkdir build-$TARGET-newlib && cd build-$TARGET-ne
 ../newlib-$NEWLIB_VERSION/configure --prefix="$PS2DEV/$TARGET" --target="$TARGET" || { exit 1; }
 
 ## Compile and install.
-make clean && TARGET_CFLAGS="-G0" make -j $PROC_NR && make install && make clean || { exit 1; }
+make clean && make -j $PROC_NR && make install && make clean || { exit 1; }

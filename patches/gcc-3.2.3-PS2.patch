@@ -2086,7 +2086,7 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips.c gcc-3.2.3/gcc/config/mips/mips.
 +}
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips.h gcc-3.2.3/gcc/config/mips/mips.h
 --- gcc-3.2.3-orig/gcc/config/mips/mips.h	2003-02-12 10:25:48.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/mips.h	2018-05-25 21:51:57.939735065 -0400
++++ gcc-3.2.3/gcc/config/mips/mips.h	2018-05-29 01:27:38.703364363 -0400
 @@ -48,6 +48,7 @@ enum delay_type {
    DELAY_NONE,				/* no delay slot */
    DELAY_LOAD,				/* load from memory delay */
@@ -4298,8 +4298,8 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/mips-protos.h gcc-3.2.3/gcc/config/mip
  extern HOST_WIDE_INT	mips_debugger_offset PARAMS ((rtx, HOST_WIDE_INT));
 diff -Nurp gcc-3.2.3-orig/gcc/config/mips/r5900.h gcc-3.2.3/gcc/config/mips/r5900.h
 --- gcc-3.2.3-orig/gcc/config/mips/r5900.h	1969-12-31 19:00:00.000000000 -0500
-+++ gcc-3.2.3/gcc/config/mips/r5900.h	2018-05-27 01:38:09.258655011 -0400
-@@ -0,0 +1,336 @@
++++ gcc-3.2.3/gcc/config/mips/r5900.h	2018-05-29 01:34:53.755911509 -0400
+@@ -0,0 +1,342 @@
 +/*
 + * Target machine definitions for the Toshiba r5900.
 + *
@@ -4348,6 +4348,12 @@ diff -Nurp gcc-3.2.3-orig/gcc/config/mips/r5900.h gcc-3.2.3/gcc/config/mips/r590
 +#define LIB_SPEC "-lc -lfileXio --whole-archive -lkernel --no-whole-archive"
 +
 +#define FILL_BDSLOT_WITH_NOP
++
++/*
++ * Don't use small data section by default.
++ */
++#undef MIPS_DEFAULT_GVALUE
++#define MIPS_DEFAULT_GVALUE 0
 +
 +/*
 + * Use Gas, target r5900, -msingle-float, 64-bit CPU and longs, split-addr (avoids la insn emits), -mmmi
@@ -6175,13 +6181,13 @@ diff -Nurp gcc-3.2.3-orig/gcc/toplev.c gcc-3.2.3/gcc/toplev.c
    shorten_branches (get_insns ());
 diff -Nurp gcc-3.2.3-orig/gcc/version.c gcc-3.2.3/gcc/version.c
 --- gcc-3.2.3-orig/gcc/version.c	2003-04-22 02:16:03.000000000 -0400
-+++ gcc-3.2.3/gcc/version.c	2018-05-26 13:45:47.538314341 -0400
++++ gcc-3.2.3/gcc/version.c	2018-05-29 01:18:48.645655651 -0400
 @@ -1,4 +1,4 @@
  #include "ansidecl.h"
  #include "version.h"
  
 -const char *const version_string = "3.2.3";
-+const char *const version_string = "3.2.3 20180526 (PS2DEV)";
++const char *const version_string = "3.2.3 20180529 (PS2DEV)";
 diff -Nurp gcc-3.2.3-orig/include/obstack.h gcc-3.2.3/include/obstack.h
 --- gcc-3.2.3-orig/include/obstack.h	2001-03-14 14:44:38.000000000 -0500
 +++ gcc-3.2.3/include/obstack.h	2018-05-25 21:51:57.991927467 -0400
