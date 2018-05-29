@@ -45,24 +45,26 @@ fi
 SDKBRANCH=`git branch -l | grep \* | cut -d ' ' -f2-`
 
 ## Stash the locally changed files.
-git stash save 'toolchain.sh' || exit 1
+git stash save 'toolchain.sh'
 
 ## Checkout the latest origin/master source in detached HEAD mode to avoid
 ## rebasing if origin was force pushed.
 ## While in this mode, no branches will be affected or commits saved unless
 ## git checkout -b <branch> is used to create a branch.
-git checkout origin/posix || exit 1
+git checkout origin/posix
 
 ## Build and install
 echo 'Building PS2SDK'
-make -s -r -j $PROC_NR clean && /usr/bin/time -f "Total time: %E" make -s -r -j $PROC_NR || exit 1
+make -s -r -j $PROC_NR clean && /usr/bin/time -f "Total time: %E" make -s -r -j $PROC_NR
+BUILD_RET=$?
+
 echo 'Installing PS2SDK'
-make -s -r install && make -r -j $PROC_NR clean || exit 1
+make -s -r install && make -r -j $PROC_NR clean
 
 ## Checkout the saved branch to exit detached HEAD mode
-git checkout $SDKBRANCH || exit 1
+git checkout $SDKBRANCH
 
 ## Restore the locally changed files. (may exit 1 if no stash found)
 git stash pop
 
-exit 0
+exit $BUILD_RET
