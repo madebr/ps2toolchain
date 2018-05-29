@@ -60,6 +60,7 @@ BUILD_RET=$?
 
 echo 'Installing PS2SDK'
 make -s -r install && make -r -j $PROC_NR clean
+INSTALL_RET=$?
 
 ## Checkout the saved branch to exit detached HEAD mode
 git checkout $SDKBRANCH
@@ -67,4 +68,15 @@ git checkout $SDKBRANCH
 ## Restore the locally changed files. (may exit 1 if no stash found)
 git stash pop
 
-exit $BUILD_RET
+## Check the return values
+if [ $BUILD_RET != 0 ]; then
+	echo "ERROR: Building PS2SDK failed."
+	exit $BUILD_RET
+fi
+
+if [ $INSTALL_RET != 0 ]; then
+	echo "ERROR: Installing PS2SDK failed."
+	exit $INSTALL_RET
+fi
+
+exit 0
