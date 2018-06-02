@@ -10,7 +10,7 @@ unset PS2SDKSRC
 
 ## Download the source code.
 if test ! -d "ps2sdk/.git"; then
-	git clone https://github.com/Boganon/ps2sdk && cd ps2sdk || exit 1
+	git clone https://github.com/boganon/ps2sdk && cd ps2sdk || exit 1
 else
 	cd ps2sdk || exit 1
 
@@ -58,9 +58,11 @@ echo 'Building PS2SDK'
 make -s -r -j $PROC_NR clean && /usr/bin/time -f "Total time: %E" make -s -r -j $PROC_NR
 BUILD_RET=$?
 
-echo 'Installing PS2SDK'
-make -s -r install && make -r -j $PROC_NR clean
-INSTALL_RET=$?
+if [ $BUILD_RET == 0 ]; then
+	echo 'Installing PS2SDK'
+	make -s -r install && make -r -j $PROC_NR clean
+	INSTALL_RET=$?
+fi
 
 ## Checkout the saved branch to exit detached HEAD mode
 git checkout $SDKBRANCH
@@ -72,11 +74,11 @@ git stash pop
 if [ $BUILD_RET != 0 ]; then
 	echo "ERROR: Building PS2SDK failed."
 	exit $BUILD_RET
-fi
-
-if [ $INSTALL_RET != 0 ]; then
-	echo "ERROR: Installing PS2SDK failed."
-	exit $INSTALL_RET
+else
+	if [ $INSTALL_RET != 0 ]; then
+		echo "ERROR: Installing PS2SDK failed."
+		exit $INSTALL_RET
+	fi
 fi
 
 exit 0
