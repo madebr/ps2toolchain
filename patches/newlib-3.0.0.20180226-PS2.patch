@@ -119,6 +119,19 @@ diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/ctype/ctype_.h newlib-3.0.0.20
  # define DEFAULT_CTYPE_PTR	((char *) _ctype_b + 127)
  
  #else	/* !ALLOW_NEGATIVE_CTYPE_INDEX */
+diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/include/machine/endian.h newlib-3.0.0.20180226/newlib/libc/include/machine/endian.h
+--- newlib-3.0.0.20180226-orig/newlib/libc/include/machine/endian.h	2018-02-26 14:39:48.000000000 -0500
++++ newlib-3.0.0.20180226/newlib/libc/include/machine/endian.h	2018-06-06 00:34:56.521573911 -0400
+@@ -20,7 +20,8 @@
+ #define	BYTE_ORDER	_BYTE_ORDER
+ #endif
+ 
+-#ifdef __GNUC__
++/* __builtin_bswap was introduced in GCC 4.x.x */
++#if defined(__GNUC__) && __GNUC__ > 3
+ #define	__bswap16(_x)	__builtin_bswap16(_x)
+ #define	__bswap32(_x)	__builtin_bswap32(_x)
+ #define	__bswap64(_x)	__builtin_bswap64(_x)
 diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/include/machine/ieeefp.h newlib-3.0.0.20180226/newlib/libc/include/machine/ieeefp.h
 --- newlib-3.0.0.20180226-orig/newlib/libc/include/machine/ieeefp.h	2018-02-26 14:39:48.000000000 -0500
 +++ newlib-3.0.0.20180226/newlib/libc/include/machine/ieeefp.h	2018-05-26 22:52:34.519890034 -0400
@@ -9772,7 +9785,7 @@ diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/stdlib/__call_atexit.c newlib-
        if (p->_ind == 0 && p->_next)
 diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/stdlib/nano-mallocr.c newlib-3.0.0.20180226/newlib/libc/stdlib/nano-mallocr.c
 --- newlib-3.0.0.20180226-orig/newlib/libc/stdlib/nano-mallocr.c	2018-02-26 14:39:48.000000000 -0500
-+++ newlib-3.0.0.20180226/newlib/libc/stdlib/nano-mallocr.c	2018-05-26 22:52:34.543981232 -0400
++++ newlib-3.0.0.20180226/newlib/libc/stdlib/nano-mallocr.c	2018-06-03 14:12:06.595171603 -0400
 @@ -106,12 +106,26 @@
  #define sbrk_start __malloc_sbrk_start
  #define current_mallinfo __malloc_current_mallinfo
@@ -9784,7 +9797,7 @@ diff -Nurp newlib-3.0.0.20180226-orig/newlib/libc/stdlib/nano-mallocr.c newlib-3
  #define ALIGN_TO(size, align) \
 -    (((size) + (align) -1L) & ~((align) -1L))
 +    ((((__PTRDIFF_TYPE__)(size)) + \
-+      ((__PTRDIFF_TYPE__)(align)) -1) & ~(((unsigned int)(align)) -1))
++      ((__PTRDIFF_TYPE__)(align)) -1) & ~(((__PTRDIFF_TYPE__)(align)) -1))
 +#undef int
 +#undef long
 +#endif
